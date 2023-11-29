@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import './composant.css';
-import recherche from '../assets/gif/recherche.gif';
+// import recherche from '../assets/gif/recherche.gif';
 import poubelle from '../assets/gif/poubelle.gif';
 import archiver from '../assets/gif/archiver.gif';
 import voir from '../assets/gif/voir.gif';
@@ -21,7 +21,7 @@ export default function TableBook() {
     const [livres, setLivres] = useState([]);
     const [titre, setTitre] = useState("");
     const [auteur, setAuteur] = useState("");
-    
+
     const [description, setDescription] = useState("");
     const [genre, setGenre] = useState("");
     const [url, setUrl] = useState("");
@@ -144,7 +144,7 @@ export default function TableBook() {
         >
           <div className={`search ${isSearchActive ? "active" : ""}`}>
             <div className="iconSearch" onClick={handleIconClick}>
-              <img src={recherche} alt="search" />
+              {/* <img src= alt="search" /> */}
             </div>
             <div className="input">
               <input
