@@ -39,11 +39,6 @@ export default function SidebarUser({openSidebarToggle, OpenSidebar}) {
                     <FaBook className='icon'/> Livres
                 </li>
             </Link>
-            <Link style={{textDecoration: 'none', color: 'white'}} to="/dashboarduser/books">
-                <li className='sidebar-list-item'>
-                <BsFillGrid3X3GapFill className='icon'/> Categories
-                </li>
-            </Link>
             <Link style={{textDecoration: 'none', color: 'white'}} onClick={handleLogout}>
                 <li className='sidebar-list-item' >
                     <CiLogout className='icon'/> Deconnection

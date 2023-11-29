@@ -1,0 +1,126 @@
+/* Table Book */
+table {
+    /* margin: 1rem auto; */
+    /* text-align: center; */
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    border: 1px solid;
+    font-size: 12px;
+}
+
+
+th,
+td {
+    padding: 8px 0;
+    border-color: #96D4D4;
+}
+
+.buttonAction {
+    width: 20px;
+    height: 20px;
+}
+
+.bg-success {
+    background-color: green !important;
+    /* Changez la couleur de fond pour le statut "En cours" */
+}
+
+.bg-danger {
+    background-color: red !important;
+    /* Changez la couleur de fond pour le statut "Terminé" */
+}
+
+/* ********** */
+
+/* Search */
+.search {
+    position: relative;
+    width: 50px;
+    height: 40px;
+    background: #fff;
+    border-radius: 60px;
+    transition: 0.5s;
+    box-shadow: 0 0 0 5px grey;
+    overflow: hidden;
+}
+
+.search button {
+    border: none;
+}
+
+.search.active {
+    width: 360px
+}
+
+.iconSearch {
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 40px;
+    background: white;
+    border-radius: 100%;
+}
+
+.iconSearch img {
+    width: 30px;
+    height: 30px;
+}
+
+.search .input {
+    position: relative;
+    width: 250px;
+    height: 40px;
+    left: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search .input input {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    padding: 10px 0;
+}
+
+.alerte {
+    max-width: 50%;
+    height: 100%;
+    background-color: red;
+    color: white;
+}
+
+/* ****** */
+.carouselExampleIndicators{
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.colcard{
+    /* box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px; */
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    border: none;
+}
+.couv{
+    width: 100%;
+    height: 20%;
+    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+.td-limit {
+    max-width: 150px;
+    /* Largeur maximale de la cellule */
+    white-space: nowrap;
+    /* Empêche le texte de passer à la ligne */
+    overflow: hidden;
+    /* Cache le texte qui dépasse */
+    text-overflow: ellipsis;
+    /* Ajoute des points de suspension */
+}

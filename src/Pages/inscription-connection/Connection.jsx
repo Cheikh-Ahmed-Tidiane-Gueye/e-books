@@ -3,18 +3,17 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 // import { collection } from 'firebase/firestore';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, db } from '../../config/firebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 // import { sendPasswordResetEmail } from 'firebase/auth';
 
-import { MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard,MDBCardBody } from 'mdb-react-ui-kit';
+import { MDBBtn, MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
-import emailIcon from '../../assets/gif/message.gif'
-import passIcon from '../../assets/gif/chiffrement.gif'
+import passIcon from '../../assets/gif/chiffrement.gif';
+import emailIcon from '../../assets/gif/message.gif';
 
 // import { FaSquareFacebook } from "react-icons/fa6"
-import { FcGoogle } from "react-icons/fc"
+import { FcGoogle } from "react-icons/fc";
 // import { FaInstagram } from "react-icons/fa"
 // import { FaXTwitter } from "react-icons/fa6"
 
@@ -68,11 +67,11 @@ export default function Connection({setIsAuthenticated}) {
           setTimeout(() => {
             setIsAuthenticated(true);
             if (isAdmin) {
-              navigate('/dashboardadmin');
+              navigate('/dashboardadmin/home');
             } else {
-              navigate('/dashboarduser');
+              navigate("/dashboarduser/home");
             }
-          }, 1000); // 3000 millisecondes = 3 secondes
+          }, 1000);
          
       }catch (error) {
         toast.error('Échec de la connexion. Veuillez vérifier vos informations.');
