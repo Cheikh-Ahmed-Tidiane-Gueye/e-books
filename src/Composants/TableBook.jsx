@@ -137,7 +137,7 @@ export default function TableBook() {
 
     const handleIconClick = () => {
         setIsSearchActive(!isSearchActive);
-  };
+    };
   
 
     // Ouverture du modal pour les details

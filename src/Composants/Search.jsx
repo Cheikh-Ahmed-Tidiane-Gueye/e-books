@@ -5,11 +5,12 @@ const Search = ({
   handleSearchChange,
   filterBooks,
   handleIconClick,
-  isSearchActive = { isSearchActive },
+  isSearchActive,
 }) => {
-  const handleFilterChange = (e) => {
-    handleSearchChange(e);
-    filterBooks(e.target.value);
+    const handleFilterChange = (e) => {
+      console.log("New search term:", e.target.value);
+    handleSearchChange(e); // Mettre à jour le searchTerm dans le parent
+    filterBooks(e.target.value); // Appeler la fonction de filtrage avec la nouvelle valeur
   };
 
   return (
@@ -31,7 +32,7 @@ const Search = ({
             placeholder="Rechercher"
             id="mysearch"
             value={searchTerm}
-            onChange={handleSearchChange}
+            onChange={handleFilterChange}
           />
         </div>
       </div>

@@ -48,34 +48,40 @@ export default function Connection({setIsAuthenticated}) {
       setPassword(e.target.value);
     }
 
+  const [isLoading, setIsLoading] = useState(false);
+  
     const handleLogin = async (e) => {
       e.preventDefault();
       const isAdmin = email === 'med@gmail.com' || email === 'cheikhahmedtidiane220@gmail.com';
 
       try {
-          await signInWithEmailAndPassword(auth, email, password);
+        setIsLoading(true);
+        await signInWithEmailAndPassword(auth, email, password);
 
-          setEmail('');
-          setPassword('');
+        setEmail("");
+        setPassword("");
 
-          toast.success("Connection reussie");
-          
-          // les informations d'authentification du stockage local
-          localStorage.setItem('isAuthenticated', 'true');
+        toast.success("Connection reussie");
 
-          // Ajout d'un délai de 3 secondes avant la redirection
-          setTimeout(() => {
-            setIsAuthenticated(true);
-            if (isAdmin) {
-              navigate("dashboardadmin/books");
-            } else {
-              navigate("/dashboarduser/home");
-            }
-          }, 1000);
-         
-      }catch (error) {
-        toast.error('Échec de la connexion. Veuillez vérifier vos informations.');
+        // les informations d'authentification du stockage local
+        localStorage.setItem("isAuthenticated", "true");
+
+        // Ajout d'un délai de 3 secondes avant la redirection
+        setTimeout(() => {
+          setIsAuthenticated(true);
+          if (isAdmin) {
+            navigate("dashboardadmin/books");
+          } else {
+            navigate("/dashboarduser/home");
+          }
+        }, 1000);
+      } catch (error) {
+        toast.error(
+          "Échec de la connexion. Veuillez vérifier vos informations."
+        );
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -99,54 +105,111 @@ export default function Connection({setIsAuthenticated}) {
     };
 
   return (
-    <MDBContainer fluid className='p-md-0 p-sm-1 background-radial-gradient overflow-hidden'>
+    <MDBContainer
+      fluid
+      className="p-md-0 p-sm-1 background-radial-gradient overflow-hidden"
+    >
       <Toaster />
-      <MDBRow className='flex'>
+      <MDBRow className="flex">
+        <MDBCol
+          md="6"
+          sm="10"
+          className="position-relative"
+          style={{ height: "100vh" }}
+        >
+          <div
+            id="radius-shape-1"
+            className="position-absolute rounded-circle shadow-5-strong"
+          ></div>
+          <div
+            id="radius-shape-2"
+            className="position-absolute shadow-5-strong"
+          ></div>
 
-        <MDBCol md='6' sm='10' className='position-relative' style={{height: "100vh"}}>
-
-          <div id="radius-shape-1" className="position-absolute rounded-circle shadow-5-strong"></div>
-          <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
-          
           <form action="" onSubmit={handleLogin}>
-            <MDBCard className='my-5 bg-glass' data-aos="zoom-in">
-                <MDBCardBody className='p-5'>
-                    
-                    <div className="livreLogo flex py-3 text-info">
-                        <h1>Connection</h1>
-                    </div>
+            <MDBCard className="my-5 bg-glass" data-aos="zoom-in">
+              <MDBCardBody className="p-5">
+                <div className="livreLogo flex py-3 text-info">
+                  <h1>Connection</h1>
+                </div>
 
-                    <div className="input-group my-4">
-                    <span className="input-group-text bg-glass" id="basic-addon1">
-                        <img src={emailIcon} alt="email" className="img-fluid icon"/>
-                    </span>
-                    <input onChange={handleEmailChange} type="email" className="form-control" placeholder="email" name="email" id="email" aria-label="email" aria-describedby="basic-addon1" required="required"/>
-                    </div>
+                <div className="input-group my-4">
+                  <span className="input-group-text bg-glass" id="basic-addon1">
+                    <img
+                      src={emailIcon}
+                      alt="email"
+                      className="img-fluid icon"
+                    />
+                  </span>
+                  <input
+                    onChange={handleEmailChange}
+                    type="email"
+                    className="form-control"
+                    placeholder="email"
+                    name="email"
+                    id="email"
+                    aria-label="email"
+                    aria-describedby="basic-addon1"
+                    required="required"
+                  />
+                </div>
 
-                    <div className="input-group my-4">
-                    <span className="input-group-text bg-glass" id="basic-addon3">
-                        <img src={passIcon} alt="Password" className="img-fluid icon"/>
-                    </span>
-                    <input onChange={handlePasswordChange} type="password"className="form-control" placeholder="Mot de passe" aria-describedby="basic-addon1" required="required"/>
-                    </div>
+                <div className="input-group my-4">
+                  <span className="input-group-text bg-glass" id="basic-addon3">
+                    <img
+                      src={passIcon}
+                      alt="Password"
+                      className="img-fluid icon"
+                    />
+                  </span>
+                  <input
+                    onChange={handlePasswordChange}
+                    type="password"
+                    className="form-control"
+                    placeholder="Mot de passe"
+                    aria-describedby="basic-addon1"
+                    required="required"
+                  />
+                </div>
 
-
-                <MDBBtn className='w-100 my-4' size='md'>Se connecter</MDBBtn>
+                <button
+                  className=" btn btn-primary btn-md w-100 my-4"
+                  size="md"
+                >
+                  {isLoading ? "Connexion en cours..." : "Se connecter"}
+                </button>
 
                 <div className="text-center">
-
-                    {/* <!-- Register buttons --> */}
-                    <div className="text-center">
-                    <p>Ou <Link to='/inscription' style={{textDecoration: 'none'}}>S'inscrire</Link></p>
-                      <p><Link to='' style={{textDecoration: 'none', color: "red"}}>Mot de passe oublier</Link></p>
+                  {/* <!-- Register buttons --> */}
+                  <div className="text-center">
+                    <p>
+                      Ou{" "}
+                      <Link
+                        to="/inscription"
+                        style={{ textDecoration: "none" }}
+                      >
+                        S'inscrire
+                      </Link>
+                    </p>
+                    <p>
+                      <Link
+                        to=""
+                        style={{ textDecoration: "none", color: "red" }}
+                      >
+                        Mot de passe oublier
+                      </Link>
+                    </p>
                     {/* <button type="button" className="btn btn-link btn-floating mx-1">
                         <FaSquareFacebook />
                     </button> */}
-    
-                    <button onClick={handleGoogleSignIn} className="googleLogin btn btn-link btn-floating mx-1">
-                        <FcGoogle />
+
+                    <button
+                      onClick={handleGoogleSignIn}
+                      className="googleLogin btn btn-link btn-floating mx-1"
+                    >
+                      <FcGoogle />
                     </button>
-    
+
                     {/* <button type="button" className="btn btn-link btn-floating mx-1">
                         <FaInstagram />
                     </button>
@@ -154,18 +217,13 @@ export default function Connection({setIsAuthenticated}) {
                     <button type="button" className="btn btn-link btn-floating mx-1">
                         <FaXTwitter />
                     </button> */}
-                    </div>
-
+                  </div>
                 </div>
-
-                </MDBCardBody>
+              </MDBCardBody>
             </MDBCard>
           </form>
-          
         </MDBCol>
-
       </MDBRow>
-
     </MDBContainer>
   );
 }
