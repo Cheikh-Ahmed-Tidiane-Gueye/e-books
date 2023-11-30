@@ -51,10 +51,16 @@ export default function TableBook() {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const fetchLivresFromDatabase = async () => {
-        const livresSnapshot = await getDocs(collection(db, 'books'));
-        const livresData = livresSnapshot.docs.map(doc => ({ livreId: doc.id, ...doc.data() }));
-        setLivres(livresData);
+      const livresSnapshot = await getDocs(collection(db, "books"));
+      const livresData = livresSnapshot.docs.map((doc) => ({
+        livreId: doc.id,
+        ...doc.data(),
+      }));
+
+      setLivres(livresData); // Mettre à jour l'état avec les données de la base de données
+      setFilteredlivres(livresData); // Utiliser les données pour l'affichage
     };
+
 
     useEffect(() => {
         fetchLivresFromDatabase();
@@ -159,58 +165,46 @@ export default function TableBook() {
 
     const handleArchive = async (livreId, nouvelArchivage, livre) => {
       try {
-        await updateDoc(doc(db, 'books', livreId), { archived: nouvelArchivage });
-        setLivres((livresPrecedents) =>
+        await updateDoc(doc(db, "books", livreId), {
+          archived: nouvelArchivage,
+        });
+
+        // Mettre à jour l'état local avec l'état archivé actualisé
+        setFilteredlivres((livresPrecedents) =>
           livresPrecedents.map((livrePrecedent) =>
-            livrePrecedent.livreId === livreId ? { ...livrePrecedent, archived: nouvelArchivage } : livrePrecedent
+            livrePrecedent.livreId === livreId
+              ? { ...livrePrecedent, archived: nouvelArchivage }
+              : livrePrecedent
           )
         );
-        toast.success(`Le livre ${livre.titre} a été ${
-          nouvelArchivage ? 'archivé' : 'désarchivé'
-        }`);
+
+        toast.success(
+          `Le livre "${livre.titre}" a été ${
+            nouvelArchivage ? "archivé" : "désarchivé"
+          }.`
+        );
       } catch (error) {
-        console.error('Erreur :', error);
-        toast.error(`Erreur lors de l'archivage/désarchivage du livre "${livre.titre}`);
+        console.error("Erreur :", error);
+        toast.error(
+          `Erreur lors de l'archivage/désarchivage du livre "${livre.titre}`
+        );
       }
     };
 
     // Fin de l'archivage
   
+    
     return (
       <>
         {/* Search */}
-        {/* <div
-          className="contener-fluid d-flex justify-content-end align-items-center mx-4"
-          data-aos="fade-down-right"
-        >
-          <div className={`search ${isSearchActive ? "active" : ""}`}>
-            <div className="iconSearch" onClick={handleIconClick}>
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/4478/4478006.png"
-                alt="search"
-              />
-            </div>
-            <div className="input">
-              <input
-                type="search"
-                placeholder="Rechercher"
-                id="mysearch"
-                value={searchTerm}
-                onChange={handleSearchChange}
-              />
-            </div>
-          </div>
-        </div> */}
-        {/* Fin search */}
-
         <Search
           searchTerm={searchTerm}
           handleSearchChange={handleSearchChange}
           filterBooks={filterBooks}
           handleIconClick={handleIconClick}
-          isSearchActive={isSearchActive} 
+          isSearchActive={isSearchActive}
         />
-
+        {/* Fin search */}
         <div className="container-fluid" data-aos="fade-up">
           <Toaster />
           <div className="row d-flex justify-content-center">
@@ -337,7 +331,7 @@ export default function TableBook() {
                     <th colSpan="3" className="py-3">
                       <button
                         type="button"
-                        className="btn btn-info btn-rounded text-light mx-4 w-75"
+                        className="btn btn-success btn-rounded text-light mx-4 w-75"
                         onClick={ajouterlivre}
                       >
                         <h6 className="p-0 m-0">Ajouter</h6>
@@ -357,23 +351,26 @@ export default function TableBook() {
                   {filteredlivres
                     .slice(indexOfFirstElement, indexOfLastElement)
                     .map((livre) => (
-                      <tr key={livre.livreId} className="">
+                      <tr
+                        key={livre.livreId}
+                        className={livre.archived ? "livre-archive" : ""}
+                      >
                         <td className="td-limit">{livre.titre}</td>
                         <td className="td-limit">{livre.auteur}</td>
                         <td className="td-limit">{livre.description}</td>
                         <td className="td-limit">{livre.genre}</td>
                         <td className="td-limit"></td>
                         <td className="d-flex">
-                          <button className="sup rounded-circle mx-1">
+                          <button className="btn-md rounded-circle mx-1">
                             <img
                               src={voir}
                               alt="detail"
-                              className="rounded-circle buttonAction"
+                              className="rounded-circle buttonAction "
                               onClick={() => handleShowDetailsModal(livre)}
                             />
                           </button>
                           <button
-                            className="sup rounded-circle mx-1"
+                            className="btn-md rounded-circle mx-1 btn-archiver"
                             onClick={() =>
                               handleArchive(
                                 livre.livreId,
@@ -388,7 +385,8 @@ export default function TableBook() {
                               className="rounded-circle buttonAction"
                             />
                           </button>
-                          <button className="sup rounded-circle mx-1">
+
+                          <button className="btn-md rounded-circle mx-1">
                             <img
                               src={poubelle}
                               alt="supprimer"

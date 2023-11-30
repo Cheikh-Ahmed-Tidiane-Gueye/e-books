@@ -94,7 +94,7 @@ export default function Inscription({setIsAuthenticated}) {
         setPassword("");
         setConfirmPassword("");
 
-        toast.success("Inscription reussit")
+        toast.success("Inscription reussie")
         console.log('Données utilisateur ajoutées à Firestore avec succès.');
         
         // Ajout d'un délai de 3 secondes avant la redirection
