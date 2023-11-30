@@ -67,7 +67,7 @@ export default function Connection({setIsAuthenticated}) {
           setTimeout(() => {
             setIsAuthenticated(true);
             if (isAdmin) {
-              navigate('/dashboardadmin/home');
+              navigate("dashboardadmin/books");
             } else {
               navigate("/dashboarduser/home");
             }
@@ -103,7 +103,7 @@ export default function Connection({setIsAuthenticated}) {
       <Toaster />
       <MDBRow className='flex'>
 
-        <MDBCol md='6' sm='10' className='position-relative'>
+        <MDBCol md='6' sm='10' className='position-relative' style={{height: "100vh"}}>
 
           <div id="radius-shape-1" className="position-absolute rounded-circle shadow-5-strong"></div>
           <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>

@@ -4,11 +4,21 @@ import './composant.css';
 import poubelle from '../assets/gif/poubelle.gif';
 import archiver from '../assets/gif/archiver.gif';
 import voir from '../assets/gif/voir.gif';
-import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+
+
 import { db } from '../config/firebaseConfig.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
 import toast, { Toaster } from 'react-hot-toast';
+import Search from "./Search.jsx";
 
 export default function TableBook() {
 
@@ -136,15 +146,48 @@ export default function TableBook() {
     };
 
 
+    const filterBooks = (searchTerm) => {
+      const filteredBooks = livres.filter((livre) => {
+        const fullName = `${livre.titre} ${livre.auteur}`.toLowerCase();
+        return fullName.includes(searchTerm.toLowerCase());
+      });
+      setFilteredlivres(filteredBooks);
+    };
+  
+    // Archivage
+
+    const handleArchive = async (livreId, nouvelArchivage, livre) => {
+      try {
+        await updateDoc(doc(db, 'books', livreId), { archived: nouvelArchivage });
+        setLivres((livresPrecedents) =>
+          livresPrecedents.map((livrePrecedent) =>
+            livrePrecedent.livreId === livreId ? { ...livrePrecedent, archived: nouvelArchivage } : livrePrecedent
+          )
+        );
+        toast.success(`Le livre ${livre.titre} a été ${
+          nouvelArchivage ? 'archivé' : 'désarchivé'
+        }`);
+      } catch (error) {
+        console.error('Erreur :', error);
+        toast.error(`Erreur lors de l'archivage/désarchivage du livre "${livre.titre}`);
+      }
+    };
+
+    // Fin de l'archivage
+  
     return (
       <>
-        <div
+        {/* Search */}
+        {/* <div
           className="contener-fluid d-flex justify-content-end align-items-center mx-4"
           data-aos="fade-down-right"
         >
           <div className={`search ${isSearchActive ? "active" : ""}`}>
             <div className="iconSearch" onClick={handleIconClick}>
-              {/* <img src= alt="search" /> */}
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/4478/4478006.png"
+                alt="search"
+              />
             </div>
             <div className="input">
               <input
@@ -156,7 +199,15 @@ export default function TableBook() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
+        {/* Fin search */}
+
+        <Search
+          searchTerm={searchTerm}
+          handleSearchChange={handleSearchChange}
+          filterBooks={filterBooks}
+          isSearchActive={isSearchActive}
+        />
 
         <div className="container-fluid" data-aos="fade-up">
           <Toaster />
@@ -169,7 +220,10 @@ export default function TableBook() {
                 tabIndex="-1"
                 aria-labelledby="exampleModalLabel"
                 aria-hidden="true"
-                style={{ display: showDetailsModal ? "block" : "none", height: "500px" }}
+                style={{
+                  display: showDetailsModal ? "block" : "none",
+                  height: "500px",
+                }}
               >
                 <div className="modal-dialog">
                   <div className="modal-content">
@@ -302,11 +356,11 @@ export default function TableBook() {
                     .slice(indexOfFirstElement, indexOfLastElement)
                     .map((livre) => (
                       <tr key={livre.livreId} className="">
-                        <td className="">{livre.titre}</td>
-                        <td className="">{livre.auteur}</td>
+                        <td className="td-limit">{livre.titre}</td>
+                        <td className="td-limit">{livre.auteur}</td>
                         <td className="td-limit">{livre.description}</td>
-                        <td className="">{livre.genre}</td>
-                        <td className=""></td>
+                        <td className="td-limit">{livre.genre}</td>
+                        <td className="td-limit"></td>
                         <td className="d-flex">
                           <button className="sup rounded-circle mx-1">
                             <img
@@ -316,12 +370,20 @@ export default function TableBook() {
                               onClick={() => handleShowDetailsModal(livre)}
                             />
                           </button>
-                          <button className="sup rounded-circle mx-1">
+                          <button
+                            className="sup rounded-circle mx-1"
+                            onClick={() =>
+                              handleArchive(
+                                livre.livreId,
+                                !livre.archived,
+                                livre
+                              )
+                            }
+                          >
                             <img
                               src={archiver}
                               alt="archiver"
                               className="rounded-circle buttonAction"
-                              // onClick={}
                             />
                           </button>
                           <button className="sup rounded-circle mx-1">

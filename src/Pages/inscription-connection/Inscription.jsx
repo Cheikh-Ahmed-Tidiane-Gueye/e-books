@@ -157,7 +157,7 @@ export default function Inscription({setIsAuthenticated}) {
 
         </MDBCol>
 
-        <MDBCol md='5' sm='12' className='position-relative'>
+        <MDBCol md='5' sm='12' className='position-relative' style={{height: "100vh"}}>
 
           <div id="radius-shape-1" className="position-absolute rounded-circle shadow-5-strong"></div>
           <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>

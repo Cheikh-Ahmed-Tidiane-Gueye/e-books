@@ -1,9 +1,8 @@
 
 import { FaBook } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
-import { FaHome } from "react-icons/fa";
 import { GiBookshelf } from "react-icons/gi";
-import { FaArchive } from "react-icons/fa";
+// import { FaArchive } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -29,23 +28,17 @@ export default function SidebarUser({openSidebarToggle, OpenSidebar}) {
             </div>
             <span className='icon close_icon' onClick={OpenSidebar}>X</span>
         </div>
-
         <ul className='sidebar-list'>
-            <Link style={{textDecoration: 'none', color: 'white'}} to='/dashboardadmin/home'>
-                <li className='sidebar-list-item'>
-                    <FaHome className='icon'/> Accueil
-                </li>
-            </Link>
             <Link style={{textDecoration: 'none', color: 'white'}} to='/dashboardadmin/books'>
                 <li className='sidebar-list-item'>
                     <FaBook className='icon'/> Liste des livres
                 </li>
             </Link>
-            <li className='sidebar-list-item'>
+            {/* <li className='sidebar-list-item'>
                 <a href="">
                     <FaArchive className='icon'/> Liste livres archivées
                 </a>
-            </li>
+            </li> */}
             <li className='sidebar-list-item'>
                 <a href="">
                     <FaUsers className='icon'/> Liste des Utilisateurs
