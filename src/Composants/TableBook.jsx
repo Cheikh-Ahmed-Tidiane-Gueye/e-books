@@ -131,7 +131,8 @@ export default function TableBook() {
 
     const handleIconClick = () => {
         setIsSearchActive(!isSearchActive);
-    };
+  };
+  
 
     // Ouverture du modal pour les details
     const handleShowDetailsModal = (livre) => {
@@ -206,7 +207,8 @@ export default function TableBook() {
           searchTerm={searchTerm}
           handleSearchChange={handleSearchChange}
           filterBooks={filterBooks}
-          isSearchActive={isSearchActive}
+          handleIconClick={handleIconClick}
+          isSearchActive={isSearchActive} 
         />
 
         <div className="container-fluid" data-aos="fade-up">
