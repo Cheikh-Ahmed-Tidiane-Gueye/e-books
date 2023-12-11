@@ -41,7 +41,7 @@ export default function SidebarUser({openSidebarToggle, OpenSidebar}) {
             </Link>
             <Link style={{textDecoration: 'none', color: 'white'}} onClick={handleLogout}>
                 <li className='sidebar-list-item' >
-                    <CiLogout className='icon'/> Deconnection
+                    <CiLogout className='icon'/> Deconnexion
                 </li>
             </Link>
         </ul>
