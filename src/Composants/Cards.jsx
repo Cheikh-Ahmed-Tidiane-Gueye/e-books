@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react'
 import "./composant.css";
 import voir from '../assets/gif/voir.gif';
 
-import { collection, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from '../config/firebaseConfig.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
@@ -16,7 +22,6 @@ export default function Cards() {
   const [selectedBook, setSelectedBook] = useState(null);
   const [emprunter, setEmprunter] = useState([]);
 
-
   // Fonction pour récupérer le stock d'un livre depuis le localStorage
   // const getStock = (bookId) => {
   //   const stockKey = `stock_${bookId}`;
@@ -24,7 +29,7 @@ export default function Cards() {
   //   return stock ? parseInt(stock, 10) : 5;
   // };
 
-  // // Fonction pour mettre à jour le stock dans le localStorage
+  // Fonction pour mettre à jour le stock dans le localStorage
   // const updateStock = (bookId, newStock) => {
   //   const stockKey = `stock_${bookId}`;
   //   localStorage.setItem(stockKey, newStock.toString());
@@ -74,6 +79,8 @@ export default function Cards() {
       console.error("Erreur: ", error);
     }
   };
+
+
 
   AOS.init({
     duration: 800,
@@ -136,24 +143,19 @@ export default function Cards() {
                 <p className="card-text text-truncate">{book.description}</p>
                 <div className="d-flex justify-content-between">
                   <button
-                    className="btn btn-success btn-rounded mx-2"
+                    className="btn btn-info p-1 me-2"
                     onClick={() => handleEmprunterClick(book.id, book.titre)}
                     disabled={emprunter.includes(book.id)}
                   >
                     Emprunter
                   </button>
-
-                  {/* rendre */}
-
                   <button
-                    className="btn btn-info btn-sm "
+                    className="btn btn-success p-1"
                     onClick={() => handleRendre(book.id, book.titre)}
                     disabled={!emprunter.includes(book.id)}
                   >
                     Rendre
                   </button>
-
-                  {/* fin */}
                   <button className="sup rounded-circle mx-1">
                     <img
                       src={voir}

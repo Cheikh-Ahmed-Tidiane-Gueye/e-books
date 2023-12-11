@@ -4,20 +4,20 @@ import "./composant.css";
 import Search from "./Search.jsx";
 
 import { MdBlock } from "react-icons/md";
-import { MdDelete } from "react-icons/md";
+// import { MdDelete } from "react-icons/md";
 
-import { db, auth, deleteFirebaseUser } from "../config/firebaseConfig.js";
+import { db } from "../config/firebaseConfig.js";
 import {
   collection,
   getDocs,
-  updateDoc,
-  doc,
-  getDoc,
+  // updateDoc,
+  // doc,
+  // getDoc,
 } from "firebase/firestore";
 
 import { deleteUser } from "firebase/auth";
 
-import AOS from "aos";
+// import AOS from "aos";
 import "aos/dist/aos.css";
 
 import toast, { Toaster } from "react-hot-toast";
