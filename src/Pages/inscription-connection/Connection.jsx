@@ -157,7 +157,7 @@ export default function Connection({ setIsAuthenticated }) {
         className="d-flex justify-content-center"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modifier votre mot de pass</Modal.Title>
+          <Modal.Title>Modifier votre mot de passe</Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex justify-content-center p-0 m-0">
           <CDBContainer className="p-0 m-0">
@@ -176,8 +176,8 @@ export default function Connection({ setIsAuthenticated }) {
                     aria-label="email"
                     aria-describedby="basic-addon1"
                     required="required"
-                    value={email} // Assure-toi de passer la valeur actuelle de l'e-mail
-                    onChange={(e) => setEmail(e.target.value)} // Met à jour l'e-mail si nécessaire
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} // Met à jour l'email
                   />
                   <CDBBtn
                     color="info"
