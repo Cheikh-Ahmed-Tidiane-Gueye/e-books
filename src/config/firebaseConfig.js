@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword as createUser } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword as createUser,
+  deleteUser as deleteFirebaseUser
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBSY9L7jKMT-Oej1ZGZ8SLx_lQZ5Y5MAsk",
@@ -18,4 +22,4 @@ const db = getFirestore(app);
 // initialisation des services de firebase authentification
 const auth = getAuth(app);
 
-export { app, auth, db, createUser };
+export { app, auth, db, createUser, deleteFirebaseUser };

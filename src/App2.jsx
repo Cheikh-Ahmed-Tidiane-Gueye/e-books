@@ -9,6 +9,7 @@ import HomeUser from './Pages/dashboard/HomeUser';
 import BooksUser from './Pages/dashboard/BooksUser';
 import HomeAdmin from './Pages/dashboard/HomeAdmin';
 import BooksAdmin from './Pages/dashboard/BooksAdmin';
+import ArchivedBookAdmin from './Pages/dashboard/ArchivedBookAdmin';
 
 export default function App() {
   
@@ -23,41 +24,45 @@ export default function App() {
 
   const rooter = createBrowserRouter([
     {
-      path: '/',
-      element: <Connection setIsAuthenticated={setIsAuthenticated} />
+      path: "/",
+      element: <Connection setIsAuthenticated={setIsAuthenticated} />,
     },
     {
-      path: '/inscription',
-      element: <Inscription setIsAuthenticated={setIsAuthenticated} />
+      path: "/inscription",
+      element: <Inscription setIsAuthenticated={setIsAuthenticated} />,
     },
     {
-      path: '/dashboarduser',
-      element: isAuthenticated ? <DashboardUser/> : <Navigate to="/" />,
+      path: "/dashboarduser",
+      element: isAuthenticated ? <DashboardUser /> : <Navigate to="/" />,
       children: [
         {
-          path: '/dashboarduser/home',
-          element: <HomeUser/>
+          path: "/dashboarduser/home",
+          element: <HomeUser />,
         },
         {
-          path: '/dashboarduser/books',
-          element: <BooksUser/>
+          path: "/dashboarduser/books",
+          element: <BooksUser />,
         },
-      ]
+      ],
     },
     {
-      path: '/dashboardadmin',
-      element: isAuthenticated ? <DashboardAdmin/> : <Navigate to="/" />,
+      path: "/dashboardadmin",
+      element: isAuthenticated ? <DashboardAdmin /> : <Navigate to="/" />,
       children: [
         {
-          path: '/dashboardadmin/home',
-          element: <HomeAdmin/>
+          path: "/dashboardadmin/home",
+          element: <HomeAdmin />,
         },
         {
-          path: '/dashboardadmin/books',
-          element: <BooksAdmin/>
-        }
-      ]
-    }
+          path: "/dashboardadmin/books",
+          element: <BooksAdmin />,
+        },
+        {
+          path: "/dashboardadmin/archiver",
+          element: <ArchivedBookAdmin />,
+        },
+      ],
+    },
   ]);
 
   return(
