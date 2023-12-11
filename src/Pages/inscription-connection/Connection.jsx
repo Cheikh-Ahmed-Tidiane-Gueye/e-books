@@ -234,6 +234,7 @@ export default function Connection({ setIsAuthenticated }) {
                     aria-label="email"
                     aria-describedby="basic-addon1"
                     required="required"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -252,6 +253,7 @@ export default function Connection({ setIsAuthenticated }) {
                     placeholder="Mot de passe"
                     aria-describedby="basic-addon1"
                     required="required"
+                    autoComplete="off"
                   />
                 </div>
 

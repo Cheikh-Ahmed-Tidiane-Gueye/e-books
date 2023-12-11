@@ -208,6 +208,7 @@ export default function Inscription({setIsAuthenticated}) {
                     placeholder="Prenom"
                     id="prenom"
                     className="form-control"
+                    autoComplete="off"
                   />
                   <input
                     onChange={handleNomChange}
@@ -217,6 +218,7 @@ export default function Inscription({setIsAuthenticated}) {
                     placeholder="Nom"
                     id="nom"
                     className="form-control"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -238,6 +240,7 @@ export default function Inscription({setIsAuthenticated}) {
                     aria-label="email"
                     aria-describedby="basic-addon1"
                     required="required"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -256,6 +259,7 @@ export default function Inscription({setIsAuthenticated}) {
                     placeholder="Mot de passe"
                     aria-describedby="basic-addon1"
                     required="required"
+                    autoComplete="off"
                   />
                 </div>
 
@@ -274,6 +278,7 @@ export default function Inscription({setIsAuthenticated}) {
                     placeholder="Confirmer votre mot de passe"
                     aria-describedby="basic-addon1"
                     required="required"
+                    autoComplete="off"
                   />
                 </div>
 
