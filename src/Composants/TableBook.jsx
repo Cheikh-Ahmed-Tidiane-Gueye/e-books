@@ -98,7 +98,7 @@ export default function TableBook() {
         };
 
         try {
-            const docRef = await addDoc(collection(db, 'books'), nouvellivre);
+            const docRef = await addDoc(collection(db, 'books'), {...nouvellivre, stock: 5});
             console.log("Document ajouté avec l'ID :", docRef.id);
             fetchLivresFromDatabase();
             setTitre("");
