@@ -88,7 +88,7 @@ export default function Connection({ setIsAuthenticated }) {
       setEmail("");
       setPassword("");
 
-      toast.success("Connection reussie");
+      toast.success("Connexion reussie");
 
       // les informations d'authentification du stockage local
       localStorage.setItem("isAuthenticated", "true");
