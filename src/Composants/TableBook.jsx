@@ -43,7 +43,7 @@ export default function TableBook() {
 
   // Ajoutez un nouvel état pour suivre le livre à éditer
   const [selectedEditBook, setSelectedEditBook] = useState(null);
-
+  
   const indexOfLastElement = currentPage * elementsPerPage;
   const indexOfFirstElement = indexOfLastElement - elementsPerPage;
 
@@ -94,7 +94,13 @@ const ajouterlivre = async () => {
       });
 
       fetchLivresFromDatabase();
+      setTitre("");
+      setAuteur("");
+      setDescription("");
+      setGenre("");
+      setUrl("");
       toast.success("Livre mis à jour avec succès");
+
     } catch (error) {
       console.error("Erreur lors de la mise à jour du livre :", error);
     }
