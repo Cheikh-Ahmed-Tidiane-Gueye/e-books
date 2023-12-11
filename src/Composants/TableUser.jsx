@@ -84,41 +84,6 @@ export default function TableUser() {
   const filteredUsers = filterUsers(searchTerm);
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  const handleBlockUser = async (userId) => {
-    try {
-      const userRef = doc(db, "utilisateurs", userId);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists()) {
-        const isBlocked = userDoc.data().blocked; // Vérifie si l'utilisateur est déjà bloqué
-
-        await updateDoc(userRef, {
-          blocked: !isBlocked, // Inverse l'état de blocage de l'utilisateur dans Firestore
-        });
-
-        const updatedUsers = utilisateurs.map((user) =>
-          user.id === userId ? { ...user, blocked: !isBlocked } : user
-        );
-        setUtilisateurs(updatedUsers);
-
-        if (isBlocked) {
-          toast.success("L'utilisateur a été débloqué avec succès.");
-        } else {
-          toast.success("L'utilisateur a été bloqué avec succès.");
-        }
-      } else {
-        console.error("L'utilisateur n'existe pas.");
-        toast.error("Erreur : l'utilisateur n'existe pas.");
-      }
-    } catch (error) {
-      console.error(
-        "Erreur lors du blocage/deblocage de l'utilisateur :",
-        error
-      );
-      toast.error("Erreur lors du blocage/deblocage de l'utilisateur.");
-    }
-  };
-
 
   return (
     <>
@@ -158,11 +123,7 @@ export default function TableUser() {
                     <td>{user.email}</td>
                     {/* Action sur l'utilisateur (bouton Block) */}
                     <td className="d-flex justify-content-center">
-                      <button
-                        className="btn-md rounded-circle mx-1"
-                        onClick={() => handleBlockUser(user.id)}
-                        disabled={user.blocked}
-                      >
+                      <button className="btn-md rounded-circle mx-1">
                         <MdBlock />
                       </button>
                     </td>
