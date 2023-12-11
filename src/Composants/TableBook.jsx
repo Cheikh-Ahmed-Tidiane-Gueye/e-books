@@ -43,6 +43,7 @@ export default function TableBook() {
 
   // Ajoutez un nouvel état pour suivre le livre à éditer
   const [selectedEditBook, setSelectedEditBook] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   
   const indexOfLastElement = currentPage * elementsPerPage;
   const indexOfFirstElement = indexOfLastElement - elementsPerPage;
@@ -100,7 +101,7 @@ const ajouterlivre = async () => {
       setGenre("");
       setUrl("");
       toast.success("Livre mis à jour avec succès");
-
+      setSelectedEditBook(null); // Réinitialisation de selectedEditBook à null
     } catch (error) {
       console.error("Erreur lors de la mise à jour du livre :", error);
     }
@@ -142,6 +143,9 @@ const ajouterlivre = async () => {
   }
 };
 
+  useEffect(() => {
+    setIsEditing(!!selectedEditBook);
+  }, [selectedEditBook]);
 
   useEffect(() => {
     if (alerte) {
@@ -391,7 +395,9 @@ const ajouterlivre = async () => {
                       className="btn btn-success btn-rounded text-light mx-4 w-75"
                       onClick={ajouterlivre}
                     >
-                      <h6 className="p-0 m-0">Ajouter</h6>
+                      <h6 className="p-0 m-0">
+                        {isEditing ? "Mettre à jour" : "Ajouter"}
+                      </h6>
                     </button>
                   </th>
                 </tr>
