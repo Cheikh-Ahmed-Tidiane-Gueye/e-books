@@ -9,6 +9,7 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
+import { addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from '../config/firebaseConfig.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
@@ -35,30 +36,45 @@ export default function Cards() {
   //   localStorage.setItem(stockKey, newStock.toString());
   // };
 
-  // Emprunter
-  const handleEmprunterClick = async (bookId, bookTitle) => {
-    try {
-      const bookRef = doc(db, "books", bookId);
-      const bookDoc = await getDoc(bookRef);
+ // Message
+const addMessage = async (bookTitle) => {
+  try {
+    const messagesCollection = collection(db, "messages");
+    await addDoc(messagesCollection, {
+      message: `L'utilisateur a emprunté le livre "${bookTitle}"`,
+      timestamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Erreur: ", error);
+  }
+};
 
-      if (bookDoc.exists()) {
-        const stockInitial = bookDoc.data().stock;
+// Emprunter
+const handleEmprunterClick = async (bookId, bookTitle) => {
+  try {
+    const bookRef = doc(db, "books", bookId);
+    const bookDoc = await getDoc(bookRef);
 
-        if (stockInitial > 0) {
-          await updateDoc(bookRef, { stock: stockInitial - 1 });
+    if (bookDoc.exists()) {
+      const stockInitial = bookDoc.data().stock;
 
-          
-          setEmprunter((livres) => [...livres, bookId]);
+      if (stockInitial > 0) {
+        await updateDoc(bookRef, { stock: stockInitial - 1 });
+        setEmprunter((livres) => [...livres, bookId]);
 
-          toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
-        } else {
-          toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
-        }
+
+        await addMessage(bookTitle);
+
+        toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
+      } else {
+        toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
       }
-    } catch (error) {
-      console.error("Erreur: ", error);
     }
-  };
+  } catch (error) {
+    console.error("Erreur: ", error);
+  }
+};
+
 
   // Rendre
   const handleRendre = async (bookId, bookTitle) => {

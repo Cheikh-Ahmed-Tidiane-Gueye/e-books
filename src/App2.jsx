@@ -10,6 +10,7 @@ import BooksUser from './Pages/dashboard/BooksUser';
 import HomeAdmin from './Pages/dashboard/HomeAdmin';
 import BooksAdmin from './Pages/dashboard/BooksAdmin';
 import ArchivedBookAdmin from './Pages/dashboard/ArchivedBookAdmin';
+import HistoriqueAdmin from './Pages/dashboard/HistoriqueAdmin';
 
 export default function App() {
   
@@ -60,6 +61,10 @@ export default function App() {
         {
           path: "/dashboardadmin/archiver",
           element: <ArchivedBookAdmin />,
+        },
+        {
+          path: "/dashboardadmin/historique",
+          element: <HistoriqueAdmin />,
         },
       ],
     },

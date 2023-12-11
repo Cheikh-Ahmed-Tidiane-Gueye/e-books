@@ -1,5 +1,5 @@
 
-import { FaBook } from "react-icons/fa";
+import { FaBook, FaHistory } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 import { GiBookshelf } from "react-icons/gi";
 import { FaArchive } from "react-icons/fa";
@@ -56,6 +56,14 @@ export default function SidebarUser({openSidebarToggle, OpenSidebar}) {
         >
           <li className="sidebar-list-item">
               <FaArchive className="icon" /> Livres archivés
+          </li>
+        </Link>
+        <Link
+          style={{ textDecoration: "none", color: "white" }}
+          to="/dashboardadmin/historique"
+        >
+          <li className="sidebar-list-item">
+              <FaHistory className="icon" />  Historique
           </li>
         </Link>
         <li className="sidebar-list-item" onClick={handleLogout}>
