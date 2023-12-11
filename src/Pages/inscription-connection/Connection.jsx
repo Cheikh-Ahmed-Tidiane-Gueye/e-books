@@ -88,7 +88,7 @@ export default function Connection({ setIsAuthenticated }) {
       setEmail("");
       setPassword("");
 
-      toast.success("Connection reussie");
+      toast.success("Connexion reussie");
 
       // les informations d'authentification du stockage local
       localStorage.setItem("isAuthenticated", "true");
@@ -213,7 +213,7 @@ export default function Connection({ setIsAuthenticated }) {
             <MDBCard className="my-5 bg-glass" data-aos="zoom-in">
               <MDBCardBody className="p-5">
                 <div className="livreLogo flex py-3 text-info">
-                  <h1>Connection</h1>
+                  <h1>Connexion</h1>
                 </div>
 
                 <div className="input-group my-4">
@@ -266,12 +266,12 @@ export default function Connection({ setIsAuthenticated }) {
                   {/* <!-- Register buttons --> */}
                   <div className="text-center">
                     <p>
-                      Ou{" "}
+                      Vous n'avez pas de compte ?{" "}
                       <Link
                         to="/inscription"
                         style={{ textDecoration: "none" }}
                       >
-                        S'inscrire
+                        Insrivez-vous ici
                       </Link>
                     </p>
 
@@ -280,7 +280,7 @@ export default function Connection({ setIsAuthenticated }) {
                         to=""
                         style={{ textDecoration: "none", color: "red" }}
                       >
-                        Mot de passe oublier
+                        Mot de passe oublier ?
                       </Link>
                     </p>
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import "./composant.css";
 import voir from '../assets/gif/voir.gif';
 
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig.js';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
@@ -14,50 +14,64 @@ export default function Cards() {
   const [books, setBooks] = useState([]);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [emprunter, setEmprunter] = useState({});
+  const [emprunter, setEmprunter] = useState([]);
+
 
   // Fonction pour récupérer le stock d'un livre depuis le localStorage
-  const getStock = (bookId) => {
-    const stockKey = `stock_${bookId}`;
-    const stock = localStorage.getItem(stockKey);
-    return stock ? parseInt(stock, 10) : 5;
+  // const getStock = (bookId) => {
+  //   const stockKey = `stock_${bookId}`;
+  //   const stock = localStorage.getItem(stockKey);
+  //   return stock ? parseInt(stock, 10) : 5;
+  // };
+
+  // // Fonction pour mettre à jour le stock dans le localStorage
+  // const updateStock = (bookId, newStock) => {
+  //   const stockKey = `stock_${bookId}`;
+  //   localStorage.setItem(stockKey, newStock.toString());
+  // };
+
+  // Emprunter
+  const handleEmprunterClick = async (bookId, bookTitle) => {
+    try {
+      const bookRef = doc(db, "books", bookId);
+      const bookDoc = await getDoc(bookRef);
+
+      if (bookDoc.exists()) {
+        const stockInitial = bookDoc.data().stock;
+
+        if (stockInitial > 0) {
+          await updateDoc(bookRef, { stock: stockInitial - 1 });
+
+          
+          setEmprunter((livres) => [...livres, bookId]);
+
+          toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
+        } else {
+          toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
+        }
+      }
+    } catch (error) {
+      console.error("Erreur: ", error);
+    }
   };
 
-  // Fonction pour mettre à jour le stock dans le localStorage
-  const updateStock = (bookId, newStock) => {
-    const stockKey = `stock_${bookId}`;
-    localStorage.setItem(stockKey, newStock.toString());
-  };
+  // Rendre
+  const handleRendre = async (bookId, bookTitle) => {
+    try {
+      const bookRef = doc(db, "books", bookId);
+      const bookDoc = await getDoc(bookRef);
 
-  const handleEmprunterClick = (bookId, bookTitle) => {
-    const currentStock = getStock(bookId);
+      if (bookDoc.exists()) {
 
-    if (currentStock > 0) {
-      // Réduire le stock dans le localStorage
-      const newStock = currentStock - 1;
-      updateStock(bookId, newStock);
+        const stockInitial = bookDoc.data().stock;
+        
+        await updateDoc(bookRef, { stock: stockInitial + 1 });
+        setEmprunter((livres) => livres.filter((livre) => livre !== bookId));
 
-      setEmprunter((prevStates) => ({
-        ...prevStates,
-        [bookId]: true,
-      }));
-
-      toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
-
-      const delaiDisable = 8000;
-      setTimeout(() => {
-        setEmprunter((prevStates) => ({
-          ...prevStates,
-          [bookId]: false,
-        }));
-      }, delaiDisable);
-
-      const delaiReturn = 9000;
-      setTimeout(() => {
-        toast.info(`Le livre "${bookTitle}" a été rendu`);
-      }, delaiReturn);
-    } else {
-      toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
+        toast.info(`Vous avez rendu le livre "${bookTitle}"`);
+      }
+    } catch (error) {
+      console.error("Erreur: ", error);
     }
   };
 
@@ -113,7 +127,7 @@ export default function Cards() {
                 src={book.url}
                 className="card-img couv"
                 alt=""
-                style={{ width: "100%", height: "250px" }}
+                style={{ width: "100%", height: "350px" }}
               />
               <div className="card-body">
                 <h4 className="card-title text-truncate">{book.titre}</h4>
@@ -122,12 +136,24 @@ export default function Cards() {
                 <p className="card-text text-truncate">{book.description}</p>
                 <div className="d-flex justify-content-between">
                   <button
-                    className="btn btn-success btn-rounded"
+                    className="btn btn-success btn-rounded mx-2"
                     onClick={() => handleEmprunterClick(book.id, book.titre)}
-                    disabled={emprunter[book.id]}
+                    disabled={emprunter.includes(book.id)}
                   >
                     Emprunter
                   </button>
+
+                  {/* rendre */}
+
+                  <button
+                    className="btn btn-info btn-sm "
+                    onClick={() => handleRendre(book.id, book.titre)}
+                    disabled={!emprunter.includes(book.id)}
+                  >
+                    Rendre
+                  </button>
+
+                  {/* fin */}
                   <button className="sup rounded-circle mx-1">
                     <img
                       src={voir}

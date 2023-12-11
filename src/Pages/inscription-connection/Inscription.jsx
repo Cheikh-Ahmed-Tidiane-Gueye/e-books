@@ -285,9 +285,9 @@ export default function Inscription({setIsAuthenticated}) {
                   {/* <!-- Register buttons --> */}
                   <div className="text-center">
                     <p>
-                      Ou{" "}
+                      Vous avez un compte ?{" "}
                       <Link to="/" style={{ textDecoration: "none" }}>
-                        Se connecter
+                        Connectez-vous ici
                       </Link>
                     </p>
                     {/* <button type="button" className="btn btn-link btn-floating mx-1">
