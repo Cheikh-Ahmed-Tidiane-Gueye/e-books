@@ -55,7 +55,7 @@ export default function SidebarUser({openSidebarToggle, OpenSidebar}) {
           to="/dashboardadmin/archiver"
         >
           <li className="sidebar-list-item">
-              <FaArchive className="icon" /> Livres archivées
+              <FaArchive className="icon" /> Livres archivés
           </li>
         </Link>
         <li className="sidebar-list-item" onClick={handleLogout}>
