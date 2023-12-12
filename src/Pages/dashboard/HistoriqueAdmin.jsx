@@ -15,9 +15,9 @@ const HistoriqueAdmin = () => {
           ...doc.data(),
         }));
         setMessages(messagesData);
-        console.log('Récupération des messages réussie');
+        console.log('Récupération réussie');
       } catch (error) {
-        console.error('Erreur lors de la récupération des messages: ', error);
+        console.error('Erreur: ', error);
       }
     };
 
@@ -25,11 +25,11 @@ const HistoriqueAdmin = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Liste des emprunts :</h2>
+    <div className='m-4 '>
+      <h2 className='text-dark fs-4'>Historique des emprunts :</h2>
       <ul>
         {messages.map((message) => (
-          <li key={message.id}>{message.message}</li>
+          <li className='text-dark' key={message.id}>{message.message}</li>
         ))}
       </ul>
     </div>
