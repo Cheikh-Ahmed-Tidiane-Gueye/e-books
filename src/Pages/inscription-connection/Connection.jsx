@@ -282,7 +282,7 @@ export default function Connection({ setIsAuthenticated }) {
                         to=""
                         style={{ textDecoration: "none", color: "red" }}
                       >
-                        Mot de passe oublier ?
+                        Mot de passe oublié ?
                       </Link>
                     </p>
 
