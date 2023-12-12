@@ -46,13 +46,8 @@ export default function ArchivedBookAdmin() {
               />
               <div className="card-body">
                 <h4 className="card-title text-truncate">
-                  Titre: {book.titre}
-                </h4>
-                <h5 className="card-auteur">Auteur: {book.auteur}</h5>
-                <h6 className="card-auteur">Genre: {book.genre}</h6>
-                <p className="card-text text-truncate">
-                  Description: {book.description}
-                </p>
+               {book.titre}
+                </h4> 
               </div>
             </div>
           </div>
