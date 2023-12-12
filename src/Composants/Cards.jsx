@@ -150,7 +150,7 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
                 src={book.url}
                 className="card-img couv"
                 alt=""
-                style={{ width: "100%", height: "350px" }}
+                style={{ width: "100%", height: "250px" }}
               />
               <div className="card-body">
                 <h4 className="card-title text-truncate">{book.titre}</h4>
