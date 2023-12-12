@@ -16,12 +16,16 @@ import 'aos/dist/aos.css';
 
 import { ToastContainer, toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 
 export default function Cards() {
   const [books, setBooks] = useState([]);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [emprunter, setEmprunter] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+
 
   // Fonction pour récupérer le stock d'un livre depuis le localStorage
   // const getStock = (bookId) => {
@@ -36,18 +40,37 @@ export default function Cards() {
   //   localStorage.setItem(stockKey, newStock.toString());
   // };
 
- // Message
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      try {
+        setCurrentUser(user);
+        console.log("Utilisateur actuel :", user);
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
+      }
+    });
+  
+    return () => unsubscribe();
+  }, []);
+  
+  
+
+// Message
 const addMessage = async (bookTitle) => {
   try {
     const messagesCollection = collection(db, "messages");
+    const userEmail = currentUser ? currentUser.email : "notFound@gmail.com";
+    
     await addDoc(messagesCollection, {
-      message: `L'utilisateur a emprunté le livre "${bookTitle}"`,
+      message: `L'utilisateur avec le mail :${userEmail} a emprunté le livre "${bookTitle}"`,
       timestamp: serverTimestamp(),
     });
   } catch (error) {
     console.error("Erreur: ", error);
   }
 };
+
 
 // Emprunter
 const handleEmprunterClick = async (bookId, bookTitle) => {
