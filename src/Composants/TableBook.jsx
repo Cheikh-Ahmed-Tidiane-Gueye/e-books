@@ -191,9 +191,9 @@ const ajouterlivre = async () => {
       const fullName = `${livre.titre} ${livre.auteur}`.toLowerCase();
       return fullName.includes(searchTerm.toLowerCase());
     });
+    
     setFilteredlivres(filteredBooks);
   };
-
   // Archivage
 
   const handleArchive = async (livreId, nouvelArchivage, livre) => {

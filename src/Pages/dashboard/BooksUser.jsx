@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import Cards from "../../Composants/Cards";
-import Search from "../../Composants/Search";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig.js";
+import Search from "../../Composants/Search.jsx";
 
 export default function BooksUser() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredBooks, setFilteredBooks] = useState([]); // Changement de nom
-  const [isSearchActive, setIsSearchActive] = useState(false);
   const [livres, setLivres] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSearchActive, setIsSearchActive] = useState(false);
 
   useEffect(() => {
     const fetchLivres = async () => {
@@ -28,26 +27,22 @@ export default function BooksUser() {
     fetchLivres();
   }, []);
 
-  const filterBooksByTitleAndAuthor = (searchTerm) => {
-    console.log("filterBooksByTitleAndAuthor called with:", searchTerm);
-    const filteredBooks = livres.filter((book) => {
-      const fullName = `${book.titre} ${book.auteur}`.toLowerCase();
-      return fullName.includes(searchTerm.toLowerCase());
-    });
-    setFilteredBooks(filteredBooks); // Changement de nom
+  const handleIconClick = () => {
+    setIsSearchActive(!isSearchActive);
   };
-
-  useEffect(() => {
-    filterBooksByTitleAndAuthor(searchTerm);
-  }, [searchTerm, livres]);
-
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const handleIconClick = () => {
-    setIsSearchActive(!isSearchActive);
+  // Fonction pour filtrer les livres en fonction du terme de recherche
+  const filterBooks = (term) => {
+    setSearchTerm(term);
   };
+
+  // Fonction pour filtrer les livres en fonction du terme de recherche
+  const filteredLivres = livres.filter((livre) =>
+    livre.titre.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <main className="main-container text-dark">
@@ -56,13 +51,11 @@ export default function BooksUser() {
       <Search
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
-        filterBooks={filterBooksByTitleAndAuthor}
         handleIconClick={handleIconClick}
         isSearchActive={isSearchActive}
       />
       {/* Fin search */}
-      <Cards livres={filteredBooks} />{" "}
-      {/* Utilisation du nom correct pour les livres filtrés */}
+      <Cards livres={filteredLivres} />
     </main>
   );
 }

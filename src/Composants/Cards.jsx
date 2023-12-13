@@ -19,13 +19,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 
-export default function Cards() {
+export default function Cards({ livres }) {
   const [books, setBooks] = useState([]);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [emprunter, setEmprunter] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
-
 
   // Fonction pour récupérer le stock d'un livre depuis le localStorage
   // const getStock = (bookId) => {
@@ -47,58 +46,57 @@ export default function Cards() {
         setCurrentUser(user);
         console.log("Utilisateur :", user);
       } catch (error) {
-        console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
+        console.error(
+          "Erreur lors de la mise à jour de l'utilisateur :",
+          error
+        );
       }
     });
-  
+
     return () => unsubscribe();
   }, []);
-  
-  
 
-// Message
-const addMessage = async (bookTitle) => {
-  try {
-    const messagesCollection = collection(db, "messages");
-    const userName = currentUser ? currentUser.displayName : "Utilisateur inconnu";
-    
-    await addDoc(messagesCollection, {
-      message: `${userName}" a emprunté le livre "${bookTitle}"`,
-      timestamp: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error("Erreur: ", error);
-  }
-};
+  // Message
+  const addMessage = async (bookTitle) => {
+    try {
+      const messagesCollection = collection(db, "messages");
+      const userName = currentUser
+        ? currentUser.displayName
+        : "Utilisateur inconnu";
 
-
-
-// Emprunter
-const handleEmprunterClick = async (bookId, bookTitle) => {
-  try {
-    const bookRef = doc(db, "books", bookId);
-    const bookDoc = await getDoc(bookRef);
-
-    if (bookDoc.exists()) {
-      const stockInitial = bookDoc.data().stock;
-
-      if (stockInitial > 0) {
-        await updateDoc(bookRef, { stock: stockInitial - 1 });
-        setEmprunter((livres) => [...livres, bookId]);
-
-
-        await addMessage(bookTitle);
-
-        toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
-      } else {
-        toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
-      }
+      await addDoc(messagesCollection, {
+        message: `${userName} a emprunté le livre "${bookTitle}"`,
+        timestamp: serverTimestamp(),
+      });
+    } catch (error) {
+      console.error("Erreur: ", error);
     }
-  } catch (error) {
-    console.error("Erreur: ", error);
-  }
-};
+  };
 
+  // Emprunter
+  const handleEmprunterClick = async (bookId, bookTitle) => {
+    try {
+      const bookRef = doc(db, "books", bookId);
+      const bookDoc = await getDoc(bookRef);
+
+      if (bookDoc.exists()) {
+        const stockInitial = bookDoc.data().stock;
+
+        if (stockInitial > 0) {
+          await updateDoc(bookRef, { stock: stockInitial - 1 });
+          setEmprunter((livres) => [...livres, bookId]);
+
+          await addMessage(bookTitle);
+
+          toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
+        } else {
+          toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
+        }
+      }
+    } catch (error) {
+      console.error("Erreur: ", error);
+    }
+  };
 
   // Rendre
   const handleRendre = async (bookId, bookTitle) => {
@@ -107,9 +105,8 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
       const bookDoc = await getDoc(bookRef);
 
       if (bookDoc.exists()) {
-
         const stockInitial = bookDoc.data().stock;
-        
+
         await updateDoc(bookRef, { stock: stockInitial + 1 });
         setEmprunter((livres) => livres.filter((livre) => livre !== bookId));
 
@@ -119,8 +116,6 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
       console.error("Erreur: ", error);
     }
   };
-
-
 
   AOS.init({
     duration: 800,
@@ -161,7 +156,7 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
   };
 
   // filtre des livres non archivés
-  const nonArchivedBooks = books.filter((book) => !book.archived);
+  const nonArchivedBooks = livres.filter((book) => !book.archived);
 
   return (
     <div className="container-fluid cards">
