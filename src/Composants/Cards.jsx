@@ -71,6 +71,26 @@ const addMessage = async (bookTitle) => {
   }
 };
 
+// Données de l'emprunt / infos 
+
+const InfoEmprunts = async (bookTitle, userId, userName) => {
+  try {
+    const infosUserCollection = collection(db, "livre&user");
+
+    await addDoc(infosUserCollection, {
+      bookTitle,
+      userId,
+      userName,
+      Timestamp: serverTimestamp(),
+    });
+
+    console.log("Informations d'emprunt stockées avec succès.");
+  } catch (error) {
+    console.error("Erreur:", error);
+  }
+};
+
+
 
 
 // Emprunter
@@ -84,8 +104,24 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
 
       if (stockInitial > 0) {
         await updateDoc(bookRef, { stock: stockInitial - 1 });
-        setEmprunter((livres) => [...livres, bookId]);
 
+        setEmprunter((emprunts) => {
+          const nouvelEmprunt = {
+            bookId,
+            userId: currentUser.uid,
+            userName: currentUser.displayName,
+          };
+
+          
+           InfoEmprunts(bookTitle, currentUser.uid, currentUser.displayName);
+
+
+          console.log("Nouvel emprunt :", nouvelEmprunt);
+
+          console.log("Utilisateur qui a emprunté :", currentUser.displayName);
+
+          return [...emprunts, nouvelEmprunt];
+        });
 
         await addMessage(bookTitle);
 
@@ -98,6 +134,7 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
     console.error("Erreur: ", error);
   }
 };
+
 
 
   // Rendre

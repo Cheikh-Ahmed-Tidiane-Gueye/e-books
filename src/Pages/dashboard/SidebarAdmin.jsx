@@ -58,14 +58,6 @@ export default function SidebarUser({openSidebarToggle, OpenSidebar}) {
               <FaArchive className="icon" /> Livres archivés
           </li>
         </Link>
-        <Link
-          style={{ textDecoration: "none", color: "white" }}
-          to="/dashboardadmin/historique"
-        >
-          <li className="sidebar-list-item">
-              <FaHistory className="icon" />  Historique
-          </li>
-        </Link>
         <li className="sidebar-list-item" onClick={handleLogout}>
             <CiLogout className="icon" /> Deconnexion
         </li>
