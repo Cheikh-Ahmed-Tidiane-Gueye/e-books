@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
 import { addDoc, collection } from 'firebase/firestore';
 import { auth, db, createUser } from '../../config/firebaseConfig';
 
@@ -41,8 +41,8 @@ export default function Inscription({setIsAuthenticated}) {
 
   const navigate = useNavigate();
 
-  /* Fonctions pour gérer les changements dans chaque champ du formulaire 
-    et Met à jour l'état l' lorsque la valeur du champ change*/
+//  Fonctions pour gérer les changements dans chaque champ du formulaire 
+
   const handlePrenomChange = (e) => {
     setPrenom(e.target.value);
   };
@@ -69,52 +69,55 @@ export default function Inscription({setIsAuthenticated}) {
   // Fonction pour gérer la soumission du formulaire
   const handleInscription = async (e) => {
     e.preventDefault();
-
+  
     // Vérifier si les mots de passe correspondent
     if (password !== confirmPassword) {
       toast.error("Les mots de passe ne correspondent pas.");
       return;
     }
-
+  
     try {
       setIsLoading(true);
-
+  
       // Création de l'utilisateur dans Firebase Auth
       const userCredential = await createUser(auth, email, password);
       const user = userCredential.user;
-
+  
+      // Mettre à jour le profil du user avec le displayName
+      await updateProfile(user, { displayName: prenom });
+  
       // Ajouter des informations à Firestore
       await addDoc(collection(db, "utilisateurs"), {
         userId: user.uid,
         prenom: prenom,
         nom: nom,
         email: email,
+        displayName: user.displayName,
       });
-
+  
       // Effacer les champs du formulaire après inscription réussie
       setPrenom("");
       setNom("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-
-      toast.success("Inscription reussie");
+  
+      toast.success("Inscription réussie");
       console.log("Données utilisateur ajoutées à Firestore avec succès.");
-
+  
       // Ajout d'un délai de 3 secondes avant la redirection
       setTimeout(() => {
         setIsAuthenticated(true);
         navigate("/");
       }, 1000); // 3000 millisecondes = 3 secondes
     } catch (error) {
-      toast.error("Vous n'avez pas put vous inscrire, reessayer");
-      console.error("Erreur lors de l'inscription : ", error);
-      // Gérer les erreurs ici, si nécessaire.
+      toast.error("Vous n'avez pas pu vous inscrire, réessayez");
+      console.error("Erreur : ", error);
     } finally {
       setIsLoading(false);
     }
-
   };
+  
 
   // Fonction pour s'inscrire avec google
   const handleGoogleSignIn = async () => {
@@ -209,6 +212,7 @@ export default function Inscription({setIsAuthenticated}) {
                     id="prenom"
                     className="form-control"
                     autoComplete="off"
+                    required
                   />
                   <input
                     onChange={handleNomChange}
@@ -219,6 +223,7 @@ export default function Inscription({setIsAuthenticated}) {
                     id="nom"
                     className="form-control"
                     autoComplete="off"
+                    required
                   />
                 </div>
 

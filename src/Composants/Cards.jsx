@@ -45,7 +45,7 @@ export default function Cards() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       try {
         setCurrentUser(user);
-        console.log("Utilisateur actuel :", user);
+        console.log("Utilisateur :", user);
       } catch (error) {
         console.error("Erreur lors de la mise à jour de l'utilisateur :", error);
       }
@@ -60,16 +60,17 @@ export default function Cards() {
 const addMessage = async (bookTitle) => {
   try {
     const messagesCollection = collection(db, "messages");
-    const userEmail = currentUser ? currentUser.email : "notFound@gmail.com";
+    const userName = currentUser ? currentUser.displayName : "Utilisateur inconnu";
     
     await addDoc(messagesCollection, {
-      message: `L'utilisateur avec le mail :${userEmail} a emprunté le livre "${bookTitle}"`,
+      message: `${userName}" a emprunté le livre "${bookTitle}"`,
       timestamp: serverTimestamp(),
     });
   } catch (error) {
     console.error("Erreur: ", error);
   }
 };
+
 
 
 // Emprunter
