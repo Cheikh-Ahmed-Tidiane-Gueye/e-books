@@ -1,3 +1,5 @@
+@import "rsuite/dist/rsuite.css";
+
 html, body, #root{
     width: 100%;
     height: 100vh;
@@ -295,3 +297,5 @@ body {
   }
 }
 /* ********************************************************* */
+
+
