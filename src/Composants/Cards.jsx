@@ -23,7 +23,8 @@ export default function Cards({ livres }) {
   const [books, setBooks] = useState([]);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [emprunter, setEmprunter] = useState([]);
+  // const [emprunter, setEmprunter] = useState([]);
+  const [emprunts, setEmprunts] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -55,6 +56,7 @@ export default function Cards({ livres }) {
         message: `${userName} a emprunté le livre "${bookTitle}"`,
         timestamp: serverTimestamp(),
       });
+      
     } catch (error) {
       console.error("Erreur: ", error);
     }
@@ -79,8 +81,6 @@ const InfoEmprunts = async (bookTitle, userId, userName) => {
 };
 
 
-
-
 // Emprunter
 const handleEmprunterClick = async (bookId, bookTitle) => {
   try {
@@ -91,54 +91,57 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
       const stockInitial = bookDoc.data().stock;
 
       if (stockInitial > 0) {
-        await updateDoc(bookRef, { stock: stockInitial - 1 });
+        console.log("EmprunterClick: Stock initial", stockInitial);
 
-        setEmprunter((emprunts) => {
-          const nouvelEmprunt = {
-            bookId,
-            userId: currentUser.uid,
-            userName: currentUser.displayName,
-          };
-
-          InfoEmprunts(bookTitle, currentUser.uid, currentUser.displayName);
-
-          console.log("Nouvel emprunt :", nouvelEmprunt);
-
-          console.log("Utilisateur qui a emprunté :", currentUser.displayName);
-
-          return [...emprunts, nouvelEmprunt];
+        await updateDoc(bookRef, {
+          stock: stockInitial - 1,
+          emprunter: true,
+          rendre: false,
+          isEmprunte: true,
         });
 
-        await addMessage(bookTitle);
+        setEmprunts((livres) => [...livres, bookId]);
 
+        await InfoEmprunts(bookTitle, currentUser.uid, currentUser.displayName);
+        await addMessage(bookTitle);
         toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
       } else {
         toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
       }
     }
-    } catch (error) {
-        console.error("Erreur: ", error);
-    }
+  } catch (error) {
+    console.error("Erreur handleEmprunterClick: ", error);
   }
+};
 
-    // Rendre
-    const handleRendre = async (bookId, bookTitle) => {
-      try {
-        const bookRef = doc(db, "books", bookId);
-        const bookDoc = await getDoc(bookRef);
+// Rendre
+const handleRendre = async (bookId, bookTitle) => {
+  try {
+    const bookRef = doc(db, "books", bookId);
+    const bookDoc = await getDoc(bookRef);
 
-        if (bookDoc.exists()) {
-          const stockInitial = bookDoc.data().stock;
+    if (bookDoc.exists()) {
+      const stockInitial = bookDoc.data().stock;
 
-          await updateDoc(bookRef, { stock: stockInitial + 1 });
-          setEmprunter((livres) => livres.filter((livre) => livre !== bookId));
+      console.log("Rendre: Stock initial", stockInitial);
 
-          toast.info(`Vous avez rendu le livre "${bookTitle}"`);
-        }
-      } catch (error) {
-        console.error("Erreur: ", error);
-      }
-    };
+      await updateDoc(bookRef, {
+        stock: stockInitial + 1,
+        emprunter: false,
+        rendre: true,
+        isEmprunte: false,
+      });
+
+      setEmprunts((livres) => livres.filter((livre) => livre !== bookId));
+
+      toast.info(`Vous avez rendu le livre "${bookTitle}"`);
+    }
+  } catch (error) {
+    console.error("Erreur handleRendre: ", error);
+  }
+};
+
+
 
     AOS.init({
       duration: 800,
@@ -153,15 +156,20 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
           const snapshot = await getDocs(booksCollection);
           const booksData = snapshot.docs.map((doc) => ({
             id: doc.id,
+            emprunter: doc.data().emprunter,
+            isEmprunte: doc.data().isEmprunte || false,
             ...doc.data(),
           }));
           setBooks(booksData);
+          setEmprunts(booksData.filter(book => book.isEmprunte).map(book => book.id));
           console.log("Récupération réussie");
         } catch (error) {
           console.error("Erreur: ", error);
           console.log("Échec");
         }
       };
+      
+      
 
       fetchBooks();
     }, []);
@@ -199,21 +207,19 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
                   <h5 className="card-auteur">{book.auteur}</h5>
                   <h6 className="card-auteur">{book.genre}</h6>
                   <p className="card-text text-truncate">{book.description}</p>
-                  <div className="d-flex justify-content-between">
-                    <button
-                      className="btn btn-info p-1 me-2"
-                      onClick={() => handleEmprunterClick(book.id, book.titre)}
-                      disabled={emprunter.includes(book.id)}
-                    >
-                      Emprunter
-                    </button>
-                    <button
-                      className="btn btn-success p-1"
-                      onClick={() => handleRendre(book.id, book.titre)}
-                      disabled={!emprunter.includes(book.id)}
-                    >
-                      Rendre
-                    </button>
+                  <div className="d-flex justify-content-between mt-2">
+                  <button
+                    className="btn btn-info p-1 me-2"
+                    onClick={() => {
+                      if (emprunts.includes(book.id)) {
+                        handleRendre(book.id, book.titre);
+                      } else {
+                        handleEmprunterClick(book.id, book.titre);
+                      }
+                    }}
+                  >
+                    {emprunts.includes(book.id) ? "Rendre" : "Emprunter"}
+                  </button>
                     <button className="sup rounded-circle mx-1">
                       <img
                         src={voir}
@@ -273,4 +279,4 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
         </div>
       </div>
     );
-  }
+  } 
