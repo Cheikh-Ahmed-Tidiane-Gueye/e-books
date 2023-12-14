@@ -102,7 +102,7 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
 
         setEmprunts((livres) => [...livres, bookId]);
 
-
+        await InfoEmprunts(bookTitle, currentUser.uid, currentUser.displayName);
         await addMessage(bookTitle);
         toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
       } else {
