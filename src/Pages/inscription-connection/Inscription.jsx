@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
 import { GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
-import { addDoc, collection } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import { auth, db, createUser } from '../../config/firebaseConfig';
 
 
@@ -38,10 +38,12 @@ export default function Inscription({setIsAuthenticated}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  // État pour stocker les utilisateurs
+  const [users, setUsers] = useState([]);
 
   const navigate = useNavigate();
 
-//  Fonctions pour gérer les changements dans chaque champ du formulaire 
+  //  Fonctions pour gérer les changements dans chaque champ du formulaire
 
   const handlePrenomChange = (e) => {
     setPrenom(e.target.value);
@@ -63,29 +65,53 @@ export default function Inscription({setIsAuthenticated}) {
     setConfirmPassword(e.target.value);
   };
 
+  // Effet useEffect pour récupérer les utilisateurs depuis Firestore
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersCollection = collection(db, "utilisateurs");
+        const usersSnapshot = await getDocs(usersCollection);
+
+        const usersData = [];
+        usersSnapshot.forEach((doc) => {
+          usersData.push({ id: doc.id, ...doc.data() });
+        });
+
+        setUsers(usersData); // Mettre à jour l'état local avec les utilisateurs récupérés
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des utilisateurs :",
+          error
+        );
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   // loader
   const [isLoading, setIsLoading] = useState(false);
 
   // Fonction pour gérer la soumission du formulaire
   const handleInscription = async (e) => {
     e.preventDefault();
-  
+
     // Vérifier si les mots de passe correspondent
     if (password !== confirmPassword) {
       toast.error("Les mots de passe ne correspondent pas.");
       return;
     }
-  
+
     try {
       setIsLoading(true);
-  
+
       // Création de l'utilisateur dans Firebase Auth
       const userCredential = await createUser(auth, email, password);
       const user = userCredential.user;
-  
+
       // Mettre à jour le profil du user avec le displayName
       await updateProfile(user, { displayName: prenom });
-  
+
       // Ajouter des informations à Firestore
       await addDoc(collection(db, "utilisateurs"), {
         userId: user.uid,
@@ -93,18 +119,19 @@ export default function Inscription({setIsAuthenticated}) {
         nom: nom,
         email: email,
         displayName: user.displayName,
+        Blocker: false,
       });
-  
+
       // Effacer les champs du formulaire après inscription réussie
       setPrenom("");
       setNom("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
-  
+
       toast.success("Inscription réussie");
       console.log("Données utilisateur ajoutées à Firestore avec succès.");
-  
+
       // Ajout d'un délai de 3 secondes avant la redirection
       setTimeout(() => {
         setIsAuthenticated(true);
@@ -117,7 +144,6 @@ export default function Inscription({setIsAuthenticated}) {
       setIsLoading(false);
     }
   };
-  
 
   // Fonction pour s'inscrire avec google
   const handleGoogleSignIn = async () => {
@@ -287,8 +313,8 @@ export default function Inscription({setIsAuthenticated}) {
                   />
                 </div>
 
-                <button className=' btn btn-info btn-md w-100 my-4' size='md'>
-                        {isLoading ? 'Inscription en cours...' : "S'inscrire"}
+                <button className=" btn btn-info btn-md w-100 my-4" size="md">
+                  {isLoading ? "Inscription en cours..." : "S'inscrire"}
                 </button>
 
                 <div className="text-center">

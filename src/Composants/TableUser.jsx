@@ -10,10 +10,11 @@ import { db } from "../config/firebaseConfig.js";
 import {
   collection,
   getDocs,
-  // updateDoc,
-  // doc,
-  // getDoc,
+  updateDoc,
+  doc,
+  getDoc,
 } from "firebase/firestore";
+
 
 import { deleteUser } from "firebase/auth";
 
@@ -85,6 +86,39 @@ export default function TableUser() {
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
 
+  const handleBlockUser = async (userId, currentBlockerStatus) => {
+    try {
+      const userDoc = doc(db, "utilisateurs", userId);
+      const userSnap = await getDoc(userDoc);
+
+      if (userSnap.exists()) {
+        // Inverser la valeur de l'attribut 'Blocker'
+        const newBlockerStatus = !currentBlockerStatus;
+
+        // Mettre à jour la valeur 'Blocker' dans Firestore pour cet utilisateur
+        await updateDoc(userDoc, { Blocker: newBlockerStatus });
+
+        // Mise à jour de l'état local des utilisateurs
+        const updatedUsers = utilisateurs.map((user) => {
+          if (user.id === userId) {
+            return { ...user, Blocker: newBlockerStatus };
+          }
+          return user;
+        });
+
+        setUtilisateurs(updatedUsers); // Mettre à jour l'état local
+      } else {
+        console.error(
+          "L'utilisateur avec cet ID n'existe pas dans la base de données."
+        );
+      }
+    } catch (error) {
+      console.error("Erreur lors de la modification de Blocker :", error);
+      // Gérer les erreurs ici
+    }
+  };
+
+
   return (
     <>
       {/* Composant Search pour la barre de recherche */}
@@ -123,8 +157,15 @@ export default function TableUser() {
                     <td>{user.email}</td>
                     {/* Action sur l'utilisateur (bouton Block) */}
                     <td className="d-flex justify-content-center">
-                      <button className="btn-md rounded-circle mx-1">
+                      {/* <button className="btn-md rounded-circle mx-1">
                         <MdBlock />
+                      </button> */}
+                      <button
+                        type="button"
+                        className="btn btn-success btn-sm rounded-pill text-light"
+                        onClick={() => handleBlockUser(user.id, user.Blocker)}
+                      >
+                        {user.Blocker ? "Débloquer" : "Bloquer"}
                       </button>
                     </td>
                   </tr>

@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, deleteDoc } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
-import { BsFillBellFill, BsPersonCircle, BsJustify } from "react-icons/bs";
+import { BsJustify } from "react-icons/bs";
 import { GiBookshelf } from "react-icons/gi";
-import { Dropdown } from "rsuite";
+import { FaBell } from "react-icons/fa";
 
 export default function Header({ OpenSidebar }) {
   const [messages, setMessages] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    console.log("dropdown");
+    setShowDropdown(!showDropdown);
+  };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -48,28 +54,29 @@ export default function Header({ OpenSidebar }) {
       <div className="menu-icon">
         <BsJustify className="icon" onClick={OpenSidebar} />
       </div>
+
       <div className="sidebar-brand py-3 d-flex align-items-center justify-content-center">
         <GiBookshelf className="icon_header mb-2 fs-1" />
         <h2 className="fs-5">E-Book</h2>
       </div>
-      <div className="header-right">
-        <Dropdown
-          title={<BsFillBellFill className="icon" />}
-          placement="bottomEnd"
-          className="px-3"
-        >
-          <Dropdown.Item>
-            {messages.map((message) => (
-              <p key={message.id} className="border rounded-pill p-1 bg-secondary text-light">
-                <span>{message.id}</span>
-                <span>{message.message}</span>
-              </p>
-            ))}
-          </Dropdown.Item>
-        </Dropdown>
 
-        <BsPersonCircle className="icon" />
+      <div className="header-right">
+        <ul className="notification-drop">
+          <li className="item" onClick={toggleDropdown}>
+            <FaBell className="notification-bell  iconbell" />
+            <span className="btn__badge pulse-button">0</span>
+            {showDropdown && (
+              <ul>
+                <li>First Item</li>
+                <li>Second Item</li>
+                <li>Third Item</li>
+              </ul>
+            )}
+          </li>
+        </ul>
       </div>
+
+        {/* <BsPersonCircle className="icon" /> */}
     </header>
   );
 }

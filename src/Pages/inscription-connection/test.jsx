@@ -2,14 +2,14 @@ import { useState } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import { collection, getDocs, doc } from "firebase/firestore";
+import { collection, getDoc, doc } from "firebase/firestore";
 import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { auth, db } from "../../config/firebaseConfig";
-import { sendPasswordResetEmail, signOut } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 import {
   MDBCard,
@@ -88,31 +88,23 @@ export default function Connection({ setIsAuthenticated }) {
         email,
         password
       );
-
       const user = userCredential.user;
 
-      // Récupérer la liste des utilisateurs depuis Firestore
-      const usersCollection = collection(db, "utilisateurs");
-      const usersSnapshot = await getDocs(usersCollection);
-      const users = usersSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      // Récupérer les informations de l'utilisateur depuis Firestore
+      const userDoc = await getDoc(doc(db, "utilisateurs", user.uid));
+      const userData = userDoc.data();
 
-      // Vérification si l'utilisateur est bloqué
-      const currentUser = users.find((u) => u.email === email); // Trouver l'utilisateur dans la liste récupérée de Firestore
-
-      if (currentUser && currentUser.Blocker) {
-        // Si l'utilisateur est bloqué, afficher un message ou effectuer une action appropriée
-        toast.error("Vous avez été bloqué. Contactez l'administrateur.");
-        setIsLoading(false);
+      if (userData && userData.Blocker) {
+        // Utilisateur bloqué, déconnexion immédiate
+        toast.error("Vous êtes bloqué. Contactez l'administrateur.");
+        await signOut(auth);
         return;
       }
 
       setEmail("");
       setPassword("");
 
-      toast.success("Connexion réussie");
+      toast.success("Connexion reussie");
 
       // les informations d'authentification du stockage local
       localStorage.setItem("isAuthenticated", "true");

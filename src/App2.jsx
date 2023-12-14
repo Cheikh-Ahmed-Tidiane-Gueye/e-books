@@ -10,10 +10,6 @@ import BooksUser from './Pages/dashboard/BooksUser';
 import HomeAdmin from './Pages/dashboard/HomeAdmin';
 import BooksAdmin from './Pages/dashboard/BooksAdmin';
 import ArchivedBookAdmin from './Pages/dashboard/ArchivedBookAdmin';
-<<<<<<< HEAD
-// import HistoriqueAdmin from './Pages/dashboard/HistoriqueAdmin';
-=======
->>>>>>> 5781d1eb6ca3337d556696795556f4ff23273021
 
 export default function App() {
   
@@ -65,13 +61,6 @@ export default function App() {
           path: "/dashboardadmin/archiver",
           element: <ArchivedBookAdmin />,
         },
-<<<<<<< HEAD
-        // {
-        //   path: "/dashboardadmin/historique",
-        //   element: <HistoriqueAdmin />,
-        // },
-=======
->>>>>>> 5781d1eb6ca3337d556696795556f4ff23273021
       ],
     },
   ]);
