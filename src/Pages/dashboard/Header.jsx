@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import { BsJustify, BsPersonCircle } from "react-icons/bs";
 import { GiBookshelf } from "react-icons/gi";
@@ -17,17 +17,22 @@ export default function Header({ OpenSidebar }) {
     setShowDropdown(!showDropdown);
   };
 
-    useEffect(() => {
-    const fetchMessages = async () => {
+  useEffect(() => {
+    const fetchMessages = () => {
       try {
         const messagesCollection = collection(db, "messages");
-        const snapshot = await getDocs(messagesCollection);
-        const messagesData = snapshot.docs.map((doc, index) => ({
-          id: index + 1,
-          ...doc.data(),
-        }));
-        setMessages(messagesData);
-        console.log("Récupération réussie");
+
+  
+        const unsubscribe = onSnapshot(messagesCollection, (snapshot) => {
+          const messagesData = snapshot.docs.map((doc, index) => ({
+            id: index + 1,
+            ...doc.data(),
+          }));
+          setMessages(messagesData);
+          console.log("Mise à jour en temps réel réussie");
+        });
+
+        return () => unsubscribe();
       } catch (error) {
         console.error("Erreur: ", error);
       }
