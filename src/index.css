@@ -387,9 +387,9 @@ ul {
   /* -webkit-animation: pulse 1.5s infinite; */
 }
 
-.pulse-button:hover {
-  /* -webkit-animation: none; */
-}
+/* .pulse-button:hover {
+  -webkit-animation: none;
+} */
 
 /* @-webkit-keyframes pulse {
   0% {
