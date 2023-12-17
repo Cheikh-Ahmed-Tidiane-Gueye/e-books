@@ -96,7 +96,7 @@ export default function Header({ isAdmin, OpenSidebar }) {
           <Link to="/dashboarduser/modifierprofil">
             <BsPersonCircle className="icon" color="white" />
           </Link>
-          {isAdmin && ( // Affiche la cloche seulement si c'est un admin
+          {isAdmin && (
             <li className="item" onClick={toggleDropdown}>
               <FaBell className="notification-bell  iconbell" />
               <span className="btn__badge pulse-button">
@@ -110,20 +110,28 @@ export default function Header({ isAdmin, OpenSidebar }) {
                       onClick={() => handleClear()}
                     />
                   </span>
-                  {messages.map((message) => (
-                    <div key={message.id} className="notification-item">
-                      <h6 className="border border-light notif-li w-100 px-3 my-1">
-                        {message.message}
-                      </h6>
-                      <MdDelete
-                        className="delete-icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteNotification(message.id);
-                        }}
-                      />
+                  {messages.length === 0 ? (
+                    <div className="notification-item d-flex justify-content-center align-items-center">
+                      <p className="text-center">
+                        Aucune notification pour le moment
+                      </p>
                     </div>
-                  ))}
+                  ) : (
+                    messages.map((message) => (
+                      <div key={message.id} className="notification-item">
+                        <h6 className="border border-light notif-li w-100 px-3 my-1">
+                          {message.message}
+                        </h6>
+                        {/* <MdDelete
+                    className="delete-icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteNotification(message.id);
+                    }}
+                  /> */}
+                      </div>
+                    ))
+                  )}
                 </ul>
               )}
             </li>
