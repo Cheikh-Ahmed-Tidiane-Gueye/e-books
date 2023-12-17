@@ -7,11 +7,10 @@ import { GiBookshelf } from "react-icons/gi";
 import { FaBell } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
-
 export default function Header({ OpenSidebar }) {
   const [messages, setMessages] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [nbrNotif, setNbrNotif] = useState(0)
+  const [nbrNotif, setNbrNotif] = useState(0);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -22,13 +21,14 @@ export default function Header({ OpenSidebar }) {
       try {
         const messagesCollection = collection(db, "messages");
 
-  
         const unsubscribe = onSnapshot(messagesCollection, (snapshot) => {
           const messagesData = snapshot.docs.map((doc, index) => ({
             id: index + 1,
             ...doc.data(),
           }));
+
           setMessages(messagesData);
+
           console.log("Mise à jour en temps réel réussie");
         });
 
@@ -58,9 +58,9 @@ export default function Header({ OpenSidebar }) {
   };
 
   const countNotifications = () => {
-    return messages.length; // Renvoie la longueur du tableau messages
+    return messages.length; 
   };
-  
+
   return (
     <header className="header">
       <div className="menu-icon">
