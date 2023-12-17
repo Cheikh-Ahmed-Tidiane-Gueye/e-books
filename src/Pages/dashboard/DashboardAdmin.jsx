@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Header from './Header'
-import HomeAdmin from './HomeAdmin'
+// import HomeAdmin from './HomeAdmin'
 import SidebarAdmin from './SidebarAdmin'
 import { Outlet } from 'react-router-dom'
 
@@ -13,10 +13,13 @@ export default function DashboarAdmin() {
   }
 
   return (
-    <div className='grid-container'>
-      <Header OpenSidebar={OpenSidebar}/>
-      <SidebarAdmin openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-      <Outlet/>
+    <div className="grid-container">
+      <Header isAdmin={true} OpenSidebar={OpenSidebar} />
+      <SidebarAdmin
+        openSidebarToggle={openSidebarToggle}
+        OpenSidebar={OpenSidebar}
+      />
+      <Outlet />
     </div>
   );
 }

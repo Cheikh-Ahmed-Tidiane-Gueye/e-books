@@ -13,10 +13,13 @@ export default function DashboarUser() {
   }
 
   return (
-    <div className='grid-container'>
-      <Header OpenSidebar={OpenSidebar}/>
-      <SidebarUser openSidebarToggle={openSidebarToggle} OpenSidebar={OpenSidebar}/>
-      <Outlet/>
+    <div className="grid-container">
+      <Header isAdmin={false} OpenSidebar={OpenSidebar} />
+      <SidebarUser
+        openSidebarToggle={openSidebarToggle}
+        OpenSidebar={OpenSidebar}
+      />
+      <Outlet />
     </div>
   );
 }

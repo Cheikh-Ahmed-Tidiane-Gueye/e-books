@@ -432,11 +432,12 @@ li{
 .notification-drop .item ul.dropdown-list {
   display: block;
   width: 500%;
-  height: 500px;
-  overflow: scroll;
+  height: 300px;
+  overflow-y: scroll;
 }
 .notif-li{
   list-style-type: none;
+  font-size: 12px;
 }
 .notification-item {
   display: flex;
@@ -447,8 +448,14 @@ li{
 .delete-icon {
   cursor: pointer;
   margin-left: 5px;
-  color: red;
-  width: 30px;
-  height: 30px;
+  color: blue;
+  width: 10%;
+  height: 10%;
   /* ou toute autre couleur que vous souhaitez */
+}
+.border-light:hover{
+  background-color: gainsboro;
+}
+.supr{
+  font-size: 10px;
 }
