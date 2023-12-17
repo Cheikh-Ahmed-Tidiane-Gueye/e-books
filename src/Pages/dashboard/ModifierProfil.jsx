@@ -38,7 +38,7 @@ const ModifierProfil = () => {
 
   return (
     <main className="main-container p-0 text-dark">
-      <h2 className='text-start mt-5'>Modifier le Profil</h2>
+      <h2 className='text-start mt-5'>Informations du Profil</h2>
 
       {userData && (
         <div className='text-start mt-5 fs-4'>

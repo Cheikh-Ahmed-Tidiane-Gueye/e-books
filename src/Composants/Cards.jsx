@@ -44,8 +44,8 @@ export default function Cards({ livres }) {
     return () => unsubscribe();
   }, []);
 
-  // Message
-  const addMessage = async (bookTitle) => {
+  // Message Emprunter
+  const addMessageEmprunter = async (bookTitle) => {
     try {
       const messagesCollection = collection(db, "messages");
       const userName = currentUser
@@ -61,6 +61,27 @@ export default function Cards({ livres }) {
       console.error("Erreur: ", error);
     }
   }
+
+// Message Rendre
+  const addMessageRendre = async (bookTitle) => {
+    try {
+      const messagesCollection = collection(db, "messages");
+      const userName = currentUser
+        ? currentUser.displayName
+        : "Utilisateur inconnu";
+  
+      await addDoc(messagesCollection, {
+        message: `${userName} a rendu le livre "${bookTitle}"`,
+        timestamp: serverTimestamp(),
+      });
+      
+    } catch (error) {
+      console.error("Erreur: ", error);
+    }
+  }
+  
+
+
 // Données de l'emprunt / infos 
 
 const InfoEmprunts = async (bookTitle, userId, userName) => {
@@ -103,7 +124,7 @@ const handleEmprunterClick = async (bookId, bookTitle) => {
         setEmprunts((livres) => [...livres, bookId]);
 
         await InfoEmprunts(bookTitle, currentUser.uid, currentUser.displayName);
-        await addMessage(bookTitle);
+        await addMessageEmprunter(bookTitle);
         toast.success(`Vous avez emprunté le livre "${bookTitle}"`);
       } else {
         toast.error(`Livre "${bookTitle}" non disponible. Stock épuisé.`);
@@ -133,6 +154,9 @@ const handleRendre = async (bookId, bookTitle) => {
       });
 
       setEmprunts((livres) => livres.filter((livre) => livre !== bookId));
+
+      await addMessageRendre(bookTitle); 
+
 
       toast.info(`Vous avez rendu le livre "${bookTitle}"`);
     }

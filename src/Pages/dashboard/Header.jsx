@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
 import { BsJustify, BsPersonCircle } from "react-icons/bs";
 import { GiBookshelf } from "react-icons/gi";
@@ -19,23 +19,22 @@ export default function Header({ isAdmin, OpenSidebar }) {
   };
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchMessages = () => {
       try {
         const messagesCollection = collection(db, "messages");
-        const snapshot = await getDocs(messagesCollection);
-        const messagesData = snapshot.docs.map((doc, index) => ({
-          id: index + 1,
-          ...doc.data(),
-        }));
 
-        const deletedMessages =
-          JSON.parse(localStorage.getItem("deletedMessages")) || [];
-        const updatedMessages = messagesData.filter(
-          (message) => !deletedMessages.includes(message.id)
-        );
-        setMessages(updatedMessages);
+        const unsubscribe = onSnapshot(messagesCollection, (snapshot) => {
+          const messagesData = snapshot.docs.map((doc, index) => ({
+            id: index + 1,
+            ...doc.data(),
+          }));
 
-        console.log("Récupération réussie");
+          setMessages(messagesData);
+
+          console.log("Mise à jour en temps réel réussie");
+        });
+
+        return () => unsubscribe();
       } catch (error) {
         console.error("Erreur: ", error);
       }
@@ -78,7 +77,7 @@ export default function Header({ isAdmin, OpenSidebar }) {
   };
 
   const countNotifications = () => {
-    return messages.length;
+    return messages.length; 
   };
 
   return (
