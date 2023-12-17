@@ -146,5 +146,69 @@ td {
     opacity: 0.6;
 }
 
-/* Bouton de blocage */
+/* Notification */
+.notification__heading {
+    color: #000000;
+    font-weight: 700;
+    font-size: 13px;
+    margin: 10px 0px 0px 10px;
+}
 
+.mark__read {
+    color: #6274ff;
+    text-decoration: none;
+}
+
+.mark__read:hover {
+    text-decoration: none !important;
+    color: rgb(99, 99, 163);
+}
+
+.notifications .container .header .header-option:hover {
+    text-decoration: none !important;
+}
+
+.card {
+    background: #f5f6ff;
+    border-radius: 10px;
+    margin: 10px 5px 10px 10px;
+    padding: 10px !important;
+}
+
+.item .card {
+    background: red;
+}
+
+.notifications .container {
+    border-radius: 5px;
+}
+
+.notifications .container .header {
+    border-bottom: 1px solid rgb(202, 197, 197);
+}
+
+.displayflex {
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.username {
+    font-weight: 580;
+    margin-right: 120px;
+}
+
+.call {
+    margin-top: 5px;
+    color: #fd3d62;
+}
+
+.call__message {
+    color: #959db2;
+    float: left;
+}
+
+.time {
+    width: 40% !important;
+    font-size: 13px !important;
+}
+/* Fin notification */

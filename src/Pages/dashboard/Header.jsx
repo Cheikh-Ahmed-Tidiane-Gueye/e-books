@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs, deleteDoc } from "firebase/firestore";
-import { db } from "../../config/firebaseConfig";
+import { db } from '../../config/firebaseConfig'
 import { BsJustify } from "react-icons/bs";
 import { GiBookshelf } from "react-icons/gi";
 import { FaBell } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 
 export default function Header({ OpenSidebar }) {
   const [messages, setMessages] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [nbrNotif, setNbrNotif] = useState(0)
 
   const toggleDropdown = () => {
     console.log("dropdown");
     setShowDropdown(!showDropdown);
   };
 
-  useEffect(() => {
+    useEffect(() => {
     const fetchMessages = async () => {
       try {
         const messagesCollection = collection(db, "messages");
@@ -49,6 +52,10 @@ export default function Header({ OpenSidebar }) {
     }
   };
 
+  const countNotifications = () => {
+    return messages.length; // Renvoie la longueur du tableau messages
+  };
+  
   return (
     <header className="header">
       <div className="menu-icon">
@@ -60,23 +67,26 @@ export default function Header({ OpenSidebar }) {
         <h2 className="fs-5">E-Book</h2>
       </div>
 
-      <div className="header-right">
-        <ul className="notification-drop">
+      <div className="header-right d-flex justify-content-around align-items-center">
+        <ul className="notification-drop px-2">
           <li className="item" onClick={toggleDropdown}>
             <FaBell className="notification-bell  iconbell" />
-            <span className="btn__badge pulse-button">0</span>
+            <span className="btn__badge pulse-button">{countNotifications()}</span>
             {showDropdown && (
-              <ul>
-                <li>First Item</li>
-                <li>Second Item</li>
-                <li>Third Item</li>
+              <ul className="dropdown-list">
+                {messages.map((message) => (
+                  <div key={message.id} className="notification-item">
+                    <li className="notif-li">
+                      {message.id}: {message.message}
+                    </li>
+                    <MdDelete className="delete-icon" />
+                  </div>
+                ))}
               </ul>
             )}
           </li>
         </ul>
       </div>
-
-        {/* <BsPersonCircle className="icon" /> */}
     </header>
   );
 }
