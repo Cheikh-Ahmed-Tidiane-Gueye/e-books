@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { collection, getDocs, deleteDoc } from "firebase/firestore";
 import { db } from "../../config/firebaseConfig";
-import { BsJustify } from "react-icons/bs";
+import { BsJustify, BsPersonCircle } from "react-icons/bs";
 import { GiBookshelf } from "react-icons/gi";
 import { FaBell } from "react-icons/fa";
 
@@ -10,7 +11,6 @@ export default function Header({ OpenSidebar }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
-    console.log("dropdown");
     setShowDropdown(!showDropdown);
   };
 
@@ -63,6 +63,9 @@ export default function Header({ OpenSidebar }) {
       <div className="header-right">
         <ul className="notification-drop">
           <li className="item" onClick={toggleDropdown}>
+            <Link to="/dashboarduser/modifierprofil">
+              <BsPersonCircle className="icon" color="white" />
+            </Link>
             <FaBell className="notification-bell  iconbell" />
             <span className="btn__badge pulse-button">0</span>
             {showDropdown && (
@@ -75,8 +78,6 @@ export default function Header({ OpenSidebar }) {
           </li>
         </ul>
       </div>
-
-        {/* <BsPersonCircle className="icon" /> */}
     </header>
   );
 }
