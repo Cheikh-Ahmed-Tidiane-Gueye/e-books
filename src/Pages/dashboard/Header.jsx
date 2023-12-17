@@ -11,9 +11,7 @@ export default function Header({ isAdmin, OpenSidebar }) {
   const [messages, setMessages] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // const toggleDropdown = () => {
-  //   setShowDropdown(!showDropdown);
-  // };
+
   const toggleDropdown = () => {
     setShowDropdown((prevShowDropdown) => !prevShowDropdown);
   };
@@ -42,23 +40,6 @@ export default function Header({ isAdmin, OpenSidebar }) {
 
     fetchMessages();
   }, []);
-
-  const handleDeleteNotification = async (id) => {
-    try {
-      // Suppression de la notification localement
-      const updatedMessages = messages.filter((message) => message.id !== id);
-      setMessages(updatedMessages);
-
-      // Suppression de la notification dans la base de données Firebase
-      const messagesCollection = collection(db, "messages");
-      const docRef = doc(messagesCollection, id.toString());
-      await deleteDoc(docRef);
-
-      console.log(`Notification avec l'id ${id} supprimée`);
-    } catch (error) {
-      console.error("Erreur lors de la suppression de la notification:", error);
-    }
-  };
 
   const handleClear = async () => {
     try {
@@ -122,13 +103,6 @@ export default function Header({ isAdmin, OpenSidebar }) {
                         <h6 className="border border-light notif-li w-100 px-3 my-1">
                           {message.message}
                         </h6>
-                        {/* <MdDelete
-                    className="delete-icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteNotification(message.id);
-                    }}
-                  /> */}
                       </div>
                     ))
                   )}
