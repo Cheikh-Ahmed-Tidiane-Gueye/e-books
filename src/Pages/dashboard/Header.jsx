@@ -74,9 +74,9 @@ export default function Header({ isAdmin, OpenSidebar }) {
 
       <div className="header-right d-flex justify-content-around align-items-center">
         <ul className="notification-drop px-2">
-          <Link to="/dashboarduser/modifierprofil">
+          {/* <Link to="/dashboarduser/modifierprofil">
             <BsPersonCircle className="icon" color="white" />
-          </Link>
+          </Link> */}
           {isAdmin && (
             <li className="item" onClick={toggleDropdown}>
               <FaBell className="notification-bell  iconbell" />

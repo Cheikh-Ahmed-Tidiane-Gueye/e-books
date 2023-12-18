@@ -10,7 +10,7 @@ import BooksUser from './Pages/dashboard/BooksUser';
 import HomeAdmin from './Pages/dashboard/HomeAdmin';
 import BooksAdmin from './Pages/dashboard/BooksAdmin';
 import ArchivedBookAdmin from './Pages/dashboard/ArchivedBookAdmin';
-import ModifierProfil from './Pages/dashboard/ModifierProfil';
+// import ModifierProfil from './Pages/dashboard/ModifierProfil';
 
 export default function App() {
   
@@ -44,10 +44,10 @@ export default function App() {
           path: "/dashboarduser/books",
           element: <BooksUser />,
         },
-        {
-          path: "/dashboarduser/modifierprofil",
-          element: <ModifierProfil />,
-        },
+        // {
+        //   path: "/dashboarduser/modifierprofil",
+        //   element: <ModifierProfil />,
+        // },
       ],
     },
     {
